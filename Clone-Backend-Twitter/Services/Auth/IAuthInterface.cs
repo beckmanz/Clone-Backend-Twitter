@@ -7,4 +7,5 @@ public interface IAuthInterface
 {
     Task<ResponseModel<AuthResponse>> Signup(SignupDto signupDto);
     Task<ResponseModel<AuthResponse>> Signin(SigninDto signinDto);
+    Task<string> GetAccessToken(string name, string slug);
 }

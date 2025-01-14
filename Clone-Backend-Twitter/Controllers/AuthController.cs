@@ -24,5 +24,11 @@ namespace Clone_Backend_Twitter.Controllers
             var response = await _authInterface.Signup(signupDto);
             return Ok(response);
         }
+        [HttpPost("signin")]
+        public async Task<ActionResult<ResponseModel<AuthResponse>>> Signin(SigninDto signinDto)
+        {
+            var response = await _authInterface.Signin(signinDto);
+            return Ok(response);
+        }
     }
 }

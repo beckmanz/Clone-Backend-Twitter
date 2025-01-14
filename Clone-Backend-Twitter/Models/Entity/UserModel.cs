@@ -11,8 +11,8 @@ public class UserModel
     public string Name { get; set; }
     public string Avatar { get; set; } = "defaultAvatar.png";
     public string Cover { get; set; } = "defaultCover.png";
-    public string Bio { get; set; }
-    public string Link { get; set; }
+    public string? Bio { get; set; }
+    public string? Link { get; set; }
     public Collection<TweetModel> Tweets { get; set; }
     public Collection<TweetLikeModel> Likes { get; set; }
 }
