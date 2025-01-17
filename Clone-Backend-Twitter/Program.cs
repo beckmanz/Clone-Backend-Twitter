@@ -1,6 +1,7 @@
 using System.Text;
 using Clone_Backend_Twitter.Data;
 using Clone_Backend_Twitter.Services.Auth;
+using Clone_Backend_Twitter.Services.Tweet;
 using Clone_Backend_Twitter.Utils;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -33,14 +34,30 @@ builder.Services.AddAuthentication(x =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
+        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            context.Response.StatusCode = 401;
+            return context.Response.WriteAsync("Token inválido ou expirado.");
+        },
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+            context.Response.StatusCode = 401;
+            return context.Response.WriteAsync("Token de autenticação é obrigatório.");
+        }
+    };
 });
 
 builder.Services.AddScoped<IAuthInterface, AuthService>();
+builder.Services.AddScoped<ITweetInterface, TweetService>();
 
 builder.Services.AddScoped<Url>();
 
