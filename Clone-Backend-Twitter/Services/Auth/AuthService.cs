@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Azure;
+using Azure.Core;
 using Clone_Backend_Twitter.Data;
 using Clone_Backend_Twitter.Models.Dto;
 using Clone_Backend_Twitter.Models.Entity;
@@ -136,9 +138,10 @@ public class AuthService : IAuthInterface
 
     public async Task<string> GetAccessToken(string name, string slug)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? String.Empty));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
+        var expiration = DateTime.UtcNow.AddHours(1);
+        
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, name),
@@ -149,9 +152,44 @@ public class AuthService : IAuthInterface
             _configuration["Jwt:Issuer"],
             _configuration["Jwt:Audience"],
             claims,
+            expires: expiration,
             signingCredentials: creds
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public async Task<UserModel> VerifyJwt(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+    
+        if (!handler.CanReadToken(token))
+        {
+            return null;
+        }
+            
+        var jwtToken = handler.ReadJwtToken(token);
+            
+        var name = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        var slug = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Slug == slug);
+            
+        return user;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
