@@ -1,6 +1,7 @@
 using System.Text;
 using Clone_Backend_Twitter.Data;
 using Clone_Backend_Twitter.Services.Auth;
+using Clone_Backend_Twitter.Services.Trend;
 using Clone_Backend_Twitter.Services.Tweet;
 using Clone_Backend_Twitter.Utils;
 using FluentValidation.AspNetCore;
@@ -45,19 +46,20 @@ builder.Services.AddAuthentication(x =>
         OnAuthenticationFailed = context =>
         {
             context.Response.StatusCode = 401;
-            return context.Response.WriteAsync("Token inválido ou expirado.");
+            return context.Response.WriteAsync("Acesso negado");
         },
         OnChallenge = context =>
         {
             context.HandleResponse();
             context.Response.StatusCode = 401;
-            return context.Response.WriteAsync("Token de autenticação é obrigatório.");
+            return context.Response.WriteAsync("Acesso negado");
         }
     };
 });
 
 builder.Services.AddScoped<IAuthInterface, AuthService>();
 builder.Services.AddScoped<ITweetInterface, TweetService>();
+builder.Services.AddScoped<ITrendInterface, TrendService>();
 
 builder.Services.AddScoped<Url>();
 

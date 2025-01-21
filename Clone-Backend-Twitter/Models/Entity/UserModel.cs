@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clone_Backend_Twitter.Models.Entity;
@@ -13,6 +14,8 @@ public class UserModel
     public string Cover { get; set; } = "defaultCover.png";
     public string? Bio { get; set; }
     public string? Link { get; set; }
+    [JsonIgnore]
     public Collection<TweetModel> Tweets { get; set; }
+    [JsonIgnore]
     public Collection<TweetLikeModel> Likes { get; set; }
 }
