@@ -39,5 +39,20 @@ namespace Clone_Backend_Twitter.Controllers
             var response = await _tweetInterface.AddTweet(user, tweetDto);
             return Ok(response);
         }
+        [HttpGet("GetTweet/{Id}")]
+        public async Task<ActionResult<ResponseModel<GetTweetResponse.Tweet>>> GetTweet(int Id)
+        {
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+            
+            var user = await _authInterface.VerifyJwt(token);
+            if (user == null)
+            {
+                return Unauthorized("Acesso Negado!");
+            }
+            
+            var response = await _tweetInterface.GetTweet(Id);
+            return Ok(response);
+        }
     }
 }
