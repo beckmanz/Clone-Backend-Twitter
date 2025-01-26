@@ -123,4 +123,55 @@ public class TweetService : ITweetInterface
             return response;
         }
     }
+
+    public async Task<ResponseModel<List<GetTweetResponse.Tweet>>> GetAnswers(int Id)
+    {
+        ResponseModel<List<GetTweetResponse.Tweet>> response = new ResponseModel<List<GetTweetResponse.Tweet>>();
+        try
+        {
+            var tweets = await _context.Tweets
+                .Include(t => t.User)
+                .Include(t => t.Likes)
+                .Where(t => t.AnswerOf == Id)
+                .ToListAsync();
+
+            if (tweets == null || tweets.Count == 0)
+            {
+                response.Status = false;
+                response.Message = "Tweet inexistente ou sem respostas";
+                return response;
+            }
+
+            var tweetData = tweets.Select(tweet => new GetTweetResponse.Tweet()
+            {
+                Id = tweet.Id,
+                UserSlug = tweet.UserSlug,
+                Body = tweet.Body,
+                Image = tweet.Image,
+                CreatedAt = tweet.CreatedAt,
+                AnswerOf = tweet.AnswerOf,
+                User = new GetTweetResponse.User()
+                {
+                    Name = tweet.User.Name,
+                    Slug = tweet.User.Slug,
+                    Avatar = _url.GetPublicUrl(tweet.User.Avatar)
+                },
+                Likes = tweet.Likes.Select(l => new GetTweetResponse.Like()
+                {
+                    UserSlug = l.UserSlug,
+                }).ToList()
+            }).ToList();
+            
+            response.Status = true;
+            response.Message = "Respostas encontradas com sucesso";
+            response.Data = tweetData;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
 }
