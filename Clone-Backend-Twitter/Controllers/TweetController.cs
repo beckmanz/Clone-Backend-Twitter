@@ -69,5 +69,20 @@ namespace Clone_Backend_Twitter.Controllers
             var response = await _tweetInterface.GetAnswers(Id);
             return Ok(response);
         }
+        [HttpPost("{Id}/Like")]
+        public async Task<ActionResult<ResponseModel<TweetLikeModel>>> LikeToggle(int Id)
+        {
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+            
+            var User = await _authInterface.VerifyJwt(token);
+            if (User == null)
+            {
+                return Unauthorized("Acesso Negado!");
+            }
+            
+            var response = await _tweetInterface.LikeToggle(User, Id);
+            return Ok(response);
+        }
     }
 }

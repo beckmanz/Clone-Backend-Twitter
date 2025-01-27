@@ -73,7 +73,6 @@ public class TweetService : ITweetInterface
             return response;
         }
     }
-
     public async Task<ResponseModel<GetTweetResponse.Tweet>> GetTweet(int Id)
     {
         ResponseModel<GetTweetResponse.Tweet> response = new ResponseModel<GetTweetResponse.Tweet>();
@@ -123,7 +122,6 @@ public class TweetService : ITweetInterface
             return response;
         }
     }
-
     public async Task<ResponseModel<List<GetTweetResponse.Tweet>>> GetAnswers(int Id)
     {
         ResponseModel<List<GetTweetResponse.Tweet>> response = new ResponseModel<List<GetTweetResponse.Tweet>>();
@@ -165,6 +163,56 @@ public class TweetService : ITweetInterface
             response.Status = true;
             response.Message = "Respostas encontradas com sucesso";
             response.Data = tweetData;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
+
+    public async Task<ResponseModel<TweetLikeModel>> LikeToggle(UserModel User, int Id)
+    {
+        ResponseModel<TweetLikeModel> response = new ResponseModel<TweetLikeModel>();
+        try
+        {
+            var tweet = await _context.Tweets
+                .FirstOrDefaultAsync(t => t.Id == Id);
+            if (tweet == null)
+            {
+                response.Status = false;
+                response.Message = "Tweet inexistente";
+                return response;
+            }
+
+            var isLiked = await _context.Likes
+                .FirstOrDefaultAsync(l => l.UserSlug == User.Slug && l.TweetId == Id);
+            if (isLiked != null)
+            {
+                _context.Remove(isLiked);
+                await _context.SaveChangesAsync();
+                
+                response.Data = null;
+                response.Message = "Like removido com sucesso";
+            }
+            else
+            {
+                var newLike = new TweetLikeModel()
+                {
+                    UserSlug = User.Slug,
+                    User = User,
+                    TweetId = Id,
+                    Tweet = tweet,
+                };
+                _context.Add(newLike);
+                await _context.SaveChangesAsync();
+
+                response.Data = null;
+                response.Message = "Like adicionado com sucesso!";
+            }
+            
             return response;
         }
         catch (Exception ex)

@@ -9,4 +9,5 @@ public interface ITweetInterface
     Task<ResponseModel<TweetModel>> AddTweet(UserModel user, TweetDto tweetDto);
     Task<ResponseModel<GetTweetResponse.Tweet>> GetTweet(int Id);
     Task<ResponseModel<List<GetTweetResponse.Tweet>>> GetAnswers(int Id);
+    Task<ResponseModel<TweetLikeModel>> LikeToggle(UserModel User, int Id);
 }
