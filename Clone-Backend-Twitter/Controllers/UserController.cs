@@ -1,3 +1,4 @@
+using Clone_Backend_Twitter.Models.Dto;
 using Clone_Backend_Twitter.Models.Response;
 using Clone_Backend_Twitter.Services.Auth;
 using Clone_Backend_Twitter.Services.User;
@@ -69,6 +70,21 @@ namespace Clone_Backend_Twitter.Controllers
             }
             
             var response = await _userInterface.FollowToggle(User, Slug);
+            return Ok(response);
+        }
+        [HttpPut]
+        public async Task<ActionResult<ResponseModel<object>>> UpdateUser(UpdateUserDto update)
+        {
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+            
+            var User = await _authInterface.VerifyJwt(token);
+            if (User == null)
+            {
+                return Unauthorized("Acesso Negado!");
+            }
+            
+            var response = await _userInterface.UpdateUser(User, update);
             return Ok(response);
         }
     }

@@ -1,5 +1,6 @@
 using System.Diagnostics.Metrics;
 using Clone_Backend_Twitter.Data;
+using Clone_Backend_Twitter.Models.Dto;
 using Clone_Backend_Twitter.Models.Entity;
 using Clone_Backend_Twitter.Models.Response;
 using Clone_Backend_Twitter.Utils;
@@ -169,6 +170,50 @@ public class UserService : IUserInterface
             }
             
             return response;
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
+
+    public async Task<ResponseModel<object>> UpdateUser(UserModel User, UpdateUserDto update)
+    {
+        ResponseModel<object> response = new ResponseModel<object>();
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(update.Name))
+            {
+                User.Name = update.Name;
+            }
+            if (!string.IsNullOrWhiteSpace(update.Bio))
+            {
+                User.Bio = update.Bio;
+            }
+            if (!string.IsNullOrWhiteSpace(update.Link))
+            {
+                User.Link = update.Link;
+            }
+            
+            _context.Update(User);
+            await _context.SaveChangesAsync();
+            
+            var userData = new
+            {
+                User.Name,
+                User.Slug,
+                Avatar = _url.GetPublicUrl(User.Avatar),
+                Cover = _url.GetPublicUrl(User.Cover),
+                User.Bio,
+                User.Link,
+            };
+            
+            response.Message = "Usuário atualizado com sucesso";
+            response.Data = userData;
+            return response;
+            
         }
         catch (Exception ex)
         {
