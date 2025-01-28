@@ -3,6 +3,7 @@ using Clone_Backend_Twitter.Data;
 using Clone_Backend_Twitter.Services.Auth;
 using Clone_Backend_Twitter.Services.Trend;
 using Clone_Backend_Twitter.Services.Tweet;
+using Clone_Backend_Twitter.Services.User;
 using Clone_Backend_Twitter.Utils;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -60,7 +61,7 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddScoped<IAuthInterface, AuthService>();
 builder.Services.AddScoped<ITweetInterface, TweetService>();
 builder.Services.AddScoped<ITrendInterface, TrendService>();
-
+builder.Services.AddScoped<IUserInterface, UserService>();
 builder.Services.AddScoped<Url>();
 
 
