@@ -1,5 +1,6 @@
 using System.Diagnostics.Metrics;
 using Clone_Backend_Twitter.Data;
+using Clone_Backend_Twitter.Models.Entity;
 using Clone_Backend_Twitter.Models.Response;
 using Clone_Backend_Twitter.Utils;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -112,6 +113,62 @@ public class UserService : IUserInterface
             response.Data = tweetData;
             return response;
 
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
+
+    public async Task<ResponseModel<object>> FollowToggle(UserModel User, string Slug)
+    {
+        ResponseModel<object> response = new ResponseModel<object>();
+        try
+        {
+            if (User.Slug == Slug)
+            {
+                response.Status = false;
+                response.Message = "Você não pode seguir a si mesmo!";
+                return response;
+            }
+            var userFollow = await _context.Users.FirstOrDefaultAsync(u => u.Slug == Slug);
+            if (userFollow == null)
+            {
+                response.Status = false;
+                response.Message = "Usuário inexistente";
+                return response;
+            }
+            
+            var isFollow = await _context.Follows
+                .Where(f => f.User1Slug == User.Slug && f.User2Slug == userFollow.Slug)
+                .FirstOrDefaultAsync();
+
+            if (isFollow != null)
+            {
+                _context.Remove(isFollow);
+                await _context.SaveChangesAsync();
+                
+                response.Message = "Você deixou de seguir este usuário.";
+                response.Data = new { Following = false };
+            }
+            else
+            {
+                var newFollowing = new FollowModel()
+                {
+                    User1Slug = User.Slug,
+                    User2Slug = userFollow.Slug,
+                };
+                
+                _context.Add(newFollowing);
+                await _context.SaveChangesAsync();
+
+                response.Message = "Você começou a seguir este usuário.";
+                response.Data = new { Following = true };
+            }
+            
+            return response;
         }
         catch (Exception ex)
         {

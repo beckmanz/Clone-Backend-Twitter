@@ -56,5 +56,20 @@ namespace Clone_Backend_Twitter.Controllers
             var response = await _userInterface.GetUserTweets(Slug, currentPage, perPage);
             return Ok(response);
         }
+        [HttpPost("{Slug}/follow")]
+        public async Task<ActionResult<ResponseModel<object>>> FolllowToggle(string Slug)
+        {
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+            
+            var User = await _authInterface.VerifyJwt(token);
+            if (User == null)
+            {
+                return Unauthorized("Acesso Negado!");
+            }
+            
+            var response = await _userInterface.FollowToggle(User, Slug);
+            return Ok(response);
+        }
     }
 }
