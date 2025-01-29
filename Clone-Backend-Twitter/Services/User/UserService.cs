@@ -76,13 +76,13 @@ public class UserService : IUserInterface
                 return response;
             }
             
-            var tweets = _context.Tweets
+            var tweets = await _context.Tweets
                 .Where(t => t.UserSlug == user.Slug && t.AnswerOf == 0)
                 .Include(t => t.Likes)
                 .OrderByDescending(t => t.CreatedAt)
                 .Skip(currentPage * perPage)
                 .Take(perPage)
-                .ToList();
+                .ToListAsync();
 
             if (tweets.Count == 0)
             {

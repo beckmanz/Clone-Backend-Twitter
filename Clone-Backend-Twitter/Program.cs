@@ -1,6 +1,7 @@
 using System.Text;
 using Clone_Backend_Twitter.Data;
 using Clone_Backend_Twitter.Services.Auth;
+using Clone_Backend_Twitter.Services.Feed;
 using Clone_Backend_Twitter.Services.Trend;
 using Clone_Backend_Twitter.Services.Tweet;
 using Clone_Backend_Twitter.Services.User;
@@ -62,6 +63,7 @@ builder.Services.AddScoped<IAuthInterface, AuthService>();
 builder.Services.AddScoped<ITweetInterface, TweetService>();
 builder.Services.AddScoped<ITrendInterface, TrendService>();
 builder.Services.AddScoped<IUserInterface, UserService>();
+builder.Services.AddScoped<IFeedInterface, FeedService>();
 builder.Services.AddScoped<Url>();
 
 
