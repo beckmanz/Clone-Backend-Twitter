@@ -222,4 +222,38 @@ public class UserService : IUserInterface
             return response;
         }
     }
+
+    public async Task<ResponseModel<object>> GetUserSuggestions(UserModel User)
+    {
+        ResponseModel<object> response = new ResponseModel<object>();
+        try
+        {
+            var followings = await _context.Follows
+                .Where(f => f.User1Slug == User.Slug)
+                .Select(f => f.User2Slug)
+                .ToListAsync();
+            
+            var suggestions = await _context.Users
+                .Where(u => u.Slug != User.Slug && !followings.Contains(u.Slug))
+                .OrderBy(u => Guid.NewGuid())
+                .Take(2)
+                .Select( u => new
+                {
+                    u.Name,
+                    u.Slug,
+                    Avatar = _url.GetPublicUrl(u.Avatar),
+                })
+                .ToListAsync();
+            
+            response.Message = "Sugestões buscadas com sucesso";
+            response.Data = suggestions;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
 }

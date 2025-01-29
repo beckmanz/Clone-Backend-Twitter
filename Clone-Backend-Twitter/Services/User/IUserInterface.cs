@@ -10,4 +10,5 @@ public interface IUserInterface
     Task<ResponseModel<object>> GetUserTweets(string Slug, int currentPage, int perPage);
     Task<ResponseModel<object>> FollowToggle(UserModel User, string Slug);
     Task<ResponseModel<object>> UpdateUser(UserModel User, UpdateUserDto update);
+    Task<ResponseModel<object>> GetUserSuggestions(UserModel User);
 }
