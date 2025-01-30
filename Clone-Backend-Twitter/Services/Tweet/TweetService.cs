@@ -22,7 +22,7 @@ public class TweetService : ITweetInterface
         _url = url;
     }
 
-    public async Task<ResponseModel<TweetModel>> AddTweet(UserModel user, TweetDto tweetDto)
+    public async Task<ResponseModel<TweetModel>> AddTweet(UserModel user, TweetDto tweetDto, IFormFile? Image)
     {
         ResponseModel<TweetModel> response = new ResponseModel<TweetModel>();
         try
@@ -37,12 +37,43 @@ public class TweetService : ITweetInterface
                     return response;
                 }
             }
+            
+            string? imageUrl = null;
+            if (Image is not null)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var fileExtension = Path.GetExtension(Image.FileName).ToLower();
+
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    response.Message = "Formato de imagem inválido. Apenas .jpg, .jpeg e .png são permitidos.";
+                    response.Status = false;
+                    return response;
+                }
+
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Tweet");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var fileName = $"{Guid.NewGuid()}_Tweet{fileExtension}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Image.CopyToAsync(fileStream);
+                }
+
+                imageUrl = _url.GetPublicUrl(Path.Combine($"Tweet/{fileName}"));
+            }
 
             var newTweet = new TweetModel()
             {
                 UserSlug = user.Slug,
                 User = user,
                 Body = tweetDto.Body,
+                Image = imageUrl,
                 AnswerOf = Convert.ToInt32(tweetDto.Answer),
             };
             

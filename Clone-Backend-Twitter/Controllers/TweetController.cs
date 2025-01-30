@@ -25,7 +25,7 @@ namespace Clone_Backend_Twitter.Controllers
 
         
         [HttpPost("AddTweet")]
-        public async Task<ActionResult<ResponseModel<TweetModel>>> AddTweet(TweetDto tweetDto)
+        public async Task<ActionResult<ResponseModel<TweetModel>>> AddTweet([FromForm] TweetDto tweetDto, [FromForm] IFormFile? Image)
         {
             var authorizationHeader = Request.Headers["Authorization"].ToString();
             var token = authorizationHeader.Substring("Bearer ".Length).Trim();
@@ -36,7 +36,7 @@ namespace Clone_Backend_Twitter.Controllers
                 return Unauthorized("Acesso Negado!");
             }
             
-            var response = await _tweetInterface.AddTweet(user, tweetDto);
+            var response = await _tweetInterface.AddTweet(user, tweetDto, Image);
             return Ok(response);
         }
         [HttpGet("GetTweet/{Id}")]
