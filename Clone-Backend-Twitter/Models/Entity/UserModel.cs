@@ -10,8 +10,8 @@ public class UserModel
     public string Email { get; set; }
     public string PasswordHash { get; set; }
     public string Name { get; set; }
-    public string Avatar { get; set; } = "defaultAvatar.png";
-    public string Cover { get; set; } = "defaultCover.png";
+    public string Avatar { get; set; } = "Avatar/defaultAvatar.jpg";
+    public string Cover { get; set; } = "Cover/defaultCover.jpg";
     public string? Bio { get; set; }
     public string? Link { get; set; }
     [JsonIgnore]

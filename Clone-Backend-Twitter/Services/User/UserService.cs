@@ -256,4 +256,148 @@ public class UserService : IUserInterface
             return response;
         }
     }
+
+    public async Task<ResponseModel<object>> UpdateAvatar(UserModel User, IFormFile? Avatar)
+    {
+        ResponseModel<object> response = new ResponseModel<object>();
+        try
+        {
+            if (Avatar is null || Avatar.Length == 0)
+            {
+                response.Message = "Nenhuma imagem enviada.";
+                response.Status = false;
+                return response;
+            }
+            
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(Avatar.FileName).ToLower();
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                response.Message = "Formato inválido. Apenas imagens .jpg, .jpeg e .png são permitidas.";
+                response.Status = false;
+                return response;
+            }
+            
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Avatar");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+            
+            if (!User.Avatar.Contains("defaultAvatar.jpg"))
+            {
+                var oldAvatarPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", User.Avatar.TrimStart('/'));
+                if (System.IO.File.Exists(oldAvatarPath))
+                {
+                    System.IO.File.Delete(oldAvatarPath);
+                }
+            }
+            
+            var fileName = $"{Guid.NewGuid()}_{User.Slug}{fileExtension}";
+            var filePath = Path.Combine(uploadsFolder, fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await Avatar.CopyToAsync(fileStream);
+            }
+            
+            var file = Path.Combine($"Avatar/{fileName}");
+            
+            User.Avatar = file;
+            _context.Update(User);
+            await _context.SaveChangesAsync();
+            
+            var userData = new
+            {
+                User.Name,
+                User.Slug,
+                Avatar = _url.GetPublicUrl(User.Avatar),
+                Cover = _url.GetPublicUrl(User.Cover),
+                User.Bio,
+                User.Link,
+            };
+            
+            response.Message = "Avatar atualizado com sucesso";
+            response.Data = userData;
+            return response;
+            
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
+
+    public async Task<ResponseModel<object>> UpdateCover(UserModel User, IFormFile? Cover)
+    {
+        ResponseModel<object> response = new ResponseModel<object>();
+        try
+        {
+            if (Cover is null || Cover.Length == 0)
+            {
+                response.Message = "Nenhuma imagem enviada.";
+                response.Status = false;
+                return response;
+            }
+            
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(Cover.FileName).ToLower();
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                response.Message = "Formato inválido. Apenas imagens .jpg, .jpeg e .png são permitidas.";
+                response.Status = false;
+                return response;
+            }
+            
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Cover");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+            
+            if (!User.Cover.Contains("defaultCover.jpg"))
+            {
+                var oldAvatarPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", User.Cover.TrimStart('/'));
+                if (System.IO.File.Exists(oldAvatarPath))
+                {
+                    System.IO.File.Delete(oldAvatarPath);
+                }
+            }
+            
+            var fileName = $"{Guid.NewGuid()}_{User.Slug}{fileExtension}";
+            var filePath = Path.Combine(uploadsFolder, fileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await Cover.CopyToAsync(fileStream);
+            }
+            
+            var file = Path.Combine($"Cover/{fileName}");
+            
+            User.Cover = file;
+            _context.Update(User);
+            await _context.SaveChangesAsync();
+            
+            var userData = new
+            {
+                User.Name,
+                User.Slug,
+                Avatar = _url.GetPublicUrl(User.Avatar),
+                Cover = _url.GetPublicUrl(User.Cover),
+                User.Bio,
+                User.Link,
+            };
+            
+            response.Message = "Cover atualizado com sucesso";
+            response.Data = userData;
+            return response;
+            
+        }
+        catch (Exception ex)
+        {
+            response.Message = ex.Message;
+            response.Status = false;
+            return response;
+        }
+    }
 }

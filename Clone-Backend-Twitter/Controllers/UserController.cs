@@ -1,4 +1,5 @@
 using Clone_Backend_Twitter.Models.Dto;
+using Clone_Backend_Twitter.Models.Entity;
 using Clone_Backend_Twitter.Models.Response;
 using Clone_Backend_Twitter.Services.Auth;
 using Clone_Backend_Twitter.Services.User;
@@ -85,6 +86,36 @@ namespace Clone_Backend_Twitter.Controllers
             }
             
             var response = await _userInterface.UpdateUser(User, update);
+            return Ok(response);
+        }
+        [HttpPut("Avatar")]
+        public async Task<ActionResult<ResponseModel<object>>> UpdateAvatar(IFormFile? Avatar)
+        {
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+            
+            var User = await _authInterface.VerifyJwt(token);
+            if (User == null)
+            {
+                return Unauthorized("Acesso Negado!");
+            }
+            
+            var response = await _userInterface.UpdateAvatar(User, Avatar);
+            return Ok(response);
+        }
+        [HttpPut("Cover")]
+        public async Task<ActionResult<ResponseModel<object>>> UpdateCover(IFormFile? Cover)
+        {
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+            
+            var User = await _authInterface.VerifyJwt(token);
+            if (User == null)
+            {
+                return Unauthorized("Acesso Negado!");
+            }
+            
+            var response = await _userInterface.UpdateCover(User, Cover);
             return Ok(response);
         }
     }

@@ -11,4 +11,6 @@ public interface IUserInterface
     Task<ResponseModel<object>> FollowToggle(UserModel User, string Slug);
     Task<ResponseModel<object>> UpdateUser(UserModel User, UpdateUserDto update);
     Task<ResponseModel<object>> GetUserSuggestions(UserModel User);
+    Task<ResponseModel<object>> UpdateAvatar(UserModel User, IFormFile? Avatar);
+    Task<ResponseModel<object>> UpdateCover(UserModel User, IFormFile? Cover);
 }
