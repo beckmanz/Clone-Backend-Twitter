@@ -6,6 +6,7 @@ using Clone_Backend_Twitter.Services.Tweet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 
 namespace Clone_Backend_Twitter.Controllers
 {
@@ -25,7 +26,8 @@ namespace Clone_Backend_Twitter.Controllers
 
         
         [HttpPost("AddTweet")]
-        public async Task<ActionResult<ResponseModel<TweetModel>>> AddTweet([FromForm] TweetDto tweetDto, [FromForm] IFormFile? Image)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<ResponseModel<TweetModel>>> AddTweet([FromForm] string Body, [FromForm] int? Answer, IFormFile? Image)
         {
             var authorizationHeader = Request.Headers["Authorization"].ToString();
             var token = authorizationHeader.Substring("Bearer ".Length).Trim();
@@ -35,7 +37,11 @@ namespace Clone_Backend_Twitter.Controllers
             {
                 return Unauthorized("Acesso Negado!");
             }
-            
+            var tweetDto = new TweetDto()
+            {
+                Body = Body,
+                Answer = Answer
+            };
             var response = await _tweetInterface.AddTweet(user, tweetDto, Image);
             return Ok(response);
         }
