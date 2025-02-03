@@ -27,18 +27,23 @@ e interações em tempo real.</p>
 ## 🚀 Como Executar
 
 <h3>Pré-requisitos</h3>
+
 - [.NET SDK](https://dotnet.microsoft.com/download) (Versão 6 ou superior)
 - [Visual Studio](https://visualstudio.microsoft.com/) (Recomendado) ou [Visual Studio Code](https://code.visualstudio.com/)
 - [Git](https://git-scm.com/) (Opcional, para clonar o repositório)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Versão 2019 ou superior) - **Obrigatório para persistência dos dados**.
 - [Postman](https://www.postman.com/downloads/) (Para testar a API)
 
+
 <h3>Clone o repositório</h3>
+
    ```sh
-   git clone https://github.com/beckmanz/Clone-Backend-Twitter.git
+    git clone https://github.com/beckmanz/Clone-Backend-Twitter.git
    ```
 <h3>Variáveis de ambiente</h3>
+
 Configure as variáveis de ambiente no arquivo appsettings.json
+
 ```json
 "ConnectionStrings": {
     "DefaultConnection": "Your connection string"
@@ -52,12 +57,14 @@ Configure as variáveis de ambiente no arquivo appsettings.json
 ```
   
 <h3>Crie e execute as migrações do banco de dados para criar as tabelas necessárias:</h3>
+
    ```sh
    dotnet ef migrations add InitialMigration
    dotnet ef database update
    ```
 <h3>Iniciando</h3>
 Agora inicie o servidor
+
    ```sh
    dotnet run
    ```
