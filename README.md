@@ -1,4 +1,7 @@
 <h1 align="center" style="font-weight: bold;"> Clone Backend Twitter</h1>
+
+<hr>
+
 <div align="center">
 
 ![c#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
@@ -13,6 +16,8 @@ Ele fornece funcionalidades essenciais para uma rede social baseada em tweets,
 incluindo autenticação de usuários, postagens, curtidas, seguidores 
 e interações em tempo real.</p>
 
+<hr>
+
 ## 📌 Funcionalidades
 ✅ Autenticação usuários via **JWT**  
 ✅ Postagem de tweets  
@@ -26,7 +31,7 @@ e interações em tempo real.</p>
 
 ## 🚀 Como Executar
 
-<h3>Pré-requisitos</h3>
+### Pré-requisitos
 
 - [.NET SDK](https://dotnet.microsoft.com/download) (Versão 6 ou superior)
 - [Visual Studio](https://visualstudio.microsoft.com/) (Recomendado) ou [Visual Studio Code](https://code.visualstudio.com/)
@@ -35,12 +40,12 @@ e interações em tempo real.</p>
 - [Postman](https://www.postman.com/downloads/) (Para testar a API)
 
 
-<h3>Clone o repositório</h3>
+### Clone o repositório
 
-   ```sh
-    git clone https://github.com/beckmanz/Clone-Backend-Twitter.git
-   ```
-<h3>Variáveis de ambiente</h3>
+```
+git clone https://github.com/beckmanz/Clone-Backend-Twitter.git
+```
+### Variáveis de ambiente
 
 Configure as variáveis de ambiente no arquivo appsettings.json
 
@@ -56,16 +61,16 @@ Configure as variáveis de ambiente no arquivo appsettings.json
   }
 ```
   
-<h3>Crie e execute as migrações do banco de dados para criar as tabelas necessárias:</h3>
+### Crie e execute as migrações do banco de dados para criar as tabelas necessárias:
 
-   ```sh
-   dotnet ef migrations add InitialMigration
-   dotnet ef database update
-   ```
-<h3>Iniciando</h3>
+```
+dotnet ef migrations add InitialMigration
+dotnet ef database update
+```
+### Iniciando
 Agora inicie o servidor
 
-   ```sh
-   dotnet run
-   ```
+```
+dotnet run
+```
 
