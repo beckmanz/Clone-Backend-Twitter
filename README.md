@@ -6,6 +6,7 @@
 ![.net](https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white)
 ![sql](https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white)
+![MIT](https://img.shields.io/badge/MIT-green?style=for-the-badge)
 
 </div>
 <p align="center">Este é um projeto de backend inspirado no Twitter, 
@@ -16,15 +17,15 @@ e interações em tempo real.</p>
 
 
 ## 📌 Funcionalidades
--[x] Autenticação usuários via **JWT**  
--[x] Postagem de tweets  
--[x] Sistema de curtidas (like/unlike)    
--[x] Sistema de seguidores (follow/unfollow)    
--[x] Feed personalizado de tweets  
--[x] Pesquisa de tweets e usuários  
--[x] Tendências baseadas em hashtags (**Trends**)  
--[x] **Validação de dados com FluentValidation**  
--[x] Integração com banco de dados SQL Server
+- [x] Autenticação usuários via **JWT**  
+- [x] Postagem de tweets  
+- [x] Sistema de curtidas (like/unlike)    
+- [x] Sistema de seguidores (follow/unfollow)    
+- [x] Feed personalizado de tweets  
+- [x] Pesquisa de tweets e usuários  
+- [x] Tendências baseadas em hashtags (**Trends**)  
+- [x] **Validação de dados com FluentValidation**  
+- [x] Integração com banco de dados SQL Server
 
 ## 🚀 Como Executar
 
@@ -41,6 +42,11 @@ e interações em tempo real.</p>
 
 ```
 git clone https://github.com/beckmanz/Clone-Backend-Twitter.git
+```
+### Restaure as dependências
+
+```
+dotnet restore
 ```
 ### Variáveis de ambiente
 
@@ -75,10 +81,10 @@ dotnet run
 
 ### Auth
 
-| Rota                         | Descrição 
-|------------------------------|----------
-| <kbd>POST /Auth/Signup</kbd> | Registra um novo usuário [Detalhes da resposta](#signup)
-| <kbd>POST /Auth/Signin</kbd> | Faz login do usuário [Detalhes da resposta](#signin)
+| Rota                         | Descrição | Detalhes|
+|------------------------------|-----------|---------|
+| <kbd>POST /Auth/Signup</kbd> | Registra um novo usuário| [Detalhes da resposta](#signup)
+| <kbd>POST /Auth/Signin</kbd> | Faz login do usuário |[Detalhes da resposta](#signin)
 
 <h3 id="signup">POST /Auth/Signup</h3>
 
@@ -126,3 +132,33 @@ dotnet run
   }
 }
 ```
+### User
+| Rota                                | Descrição                                                
+|-------------------------------------|----------------------------------------------------------
+| <kbd>GET /User/{slug}</kbd>         | Busca informações de um usuário
+| <kbd>GET /User/{slug}/Tweets</kbd>  | Busca os tweets de um usuário     
+| <kbd>POST /User/{slug}/Follow</kbd> | Segue ou deixa de seguir um usuário
+| <kbd>PUT /User</kbd>                | Atualiza as informações do usuário autenticado    
+| <kbd>PUT /User/Avatar</kbd>         | Atualiza o avatar do usuário autenticado    
+| <kbd>PUT /User/Cover</kbd>          | Atualiza o cover do usuário autenticado    
+
+### Tweet
+
+| Rota                                         | Descrição                                                
+|----------------------------------------------|----------------------------------------------------------
+| <kbd>POST /Tweet/AddTweet</kbd>              | Cria um novo tweet
+| <kbd>GET /Tweet/GetTweet/{id}</kbd>          | Busca um tweet por id    
+| <kbd>GET /Tweet/GetAnwers/{id}/Answers</kbd> | Busca as respostas de um tweet por id    
+| <kbd>POST /Tweet/{id}/Like</kbd>             | Adiciona ou remove o like de um tweet
+
+### Endpoints extras
+
+| Rota                       | Descrição                                                
+|----------------------------|----------------------------------------------------------
+| <kbd>GET /Feed</kbd>       | retorna as publicações recentes dos usuários seguidos.
+| <kbd>GET /Search</kbd>     | Busca tweets com o conteudo desejado.
+| <kbd>GET /Suggestion</kbd> | Sugere dois membros que o usuário ainda não segue.
+| <kbd>GET /Trend</kbd>      | Busca as 4 trends mais usadas nas ultimas 24 horas.
+
+## 📃License
+Esse projeto está sob licença [MIT](LICENSE.md).
