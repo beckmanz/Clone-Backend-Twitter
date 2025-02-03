@@ -36,6 +36,7 @@ public class AuthService : IAuthInterface
             if(email != null)
             {
                 response.Message = "Email já existe!";
+                response.Status = false;
                 return response;
             }
             
@@ -104,12 +105,14 @@ public class AuthService : IAuthInterface
             if(email == null)
             {
                 response.Message = "Acesso negado!";
+                response.Status = false;
                 return response;
             }
             
             if (!BCrypt.Net.BCrypt.Verify(signinDto.Password, email.PasswordHash))
             {
                 response.Message = "Acesso negado!";
+                response.Status = false;
                 return response;
             }
             

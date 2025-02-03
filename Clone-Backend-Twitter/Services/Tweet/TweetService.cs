@@ -34,6 +34,7 @@ public class TweetService : ITweetInterface
                 if(tweetData == null)
                 {
                     response.Message = "Tweet original não encontrado";
+                    response.Status = false;
                     return response;
                 }
             }
