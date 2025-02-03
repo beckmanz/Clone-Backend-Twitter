@@ -1,7 +1,5 @@
 <h1 align="center" style="font-weight: bold;"> Clone Backend Twitter</h1>
 
-<hr>
-
 <div align="center">
 
 ![c#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
@@ -16,28 +14,27 @@ Ele fornece funcionalidades essenciais para uma rede social baseada em tweets,
 incluindo autenticação de usuários, postagens, curtidas, seguidores 
 e interações em tempo real.</p>
 
-<hr>
 
 ## 📌 Funcionalidades
-✅ Autenticação usuários via **JWT**  
-✅ Postagem de tweets  
-✅ Sistema de curtidas (like/unlike)    
-✅ Sistema de seguidores (follow/unfollow)    
-✅ Feed personalizado de tweets  
-✅ Pesquisa de tweets e usuários  
-✅ Tendências baseadas em hashtags (**Trends**)  
-✅ **Validação de dados com FluentValidation**  
-✅ Integração com banco de dados SQL Server
+-[x] Autenticação usuários via **JWT**  
+-[x] Postagem de tweets  
+-[x] Sistema de curtidas (like/unlike)    
+-[x] Sistema de seguidores (follow/unfollow)    
+-[x] Feed personalizado de tweets  
+-[x] Pesquisa de tweets e usuários  
+-[x] Tendências baseadas em hashtags (**Trends**)  
+-[x] **Validação de dados com FluentValidation**  
+-[x] Integração com banco de dados SQL Server
 
 ## 🚀 Como Executar
 
-### Pré-requisitos
+### 💻Pré-requisitos
 
 - [.NET SDK](https://dotnet.microsoft.com/download) (Versão 6 ou superior)
 - [Visual Studio](https://visualstudio.microsoft.com/) (Recomendado) ou [Visual Studio Code](https://code.visualstudio.com/)
 - [Git](https://git-scm.com/) (Opcional, para clonar o repositório)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Versão 2019 ou superior) - **Obrigatório para persistência dos dados**.
-- [Postman](https://www.postman.com/downloads/) (Para testar a API)
+- [Postman](https://www.postman.com/downloads/) ou [Insomnia](https://insomnia.rest/download) (Para testar a API)
 
 
 ### Clone o repositório
@@ -74,3 +71,58 @@ Agora inicie o servidor
 dotnet run
 ```
 
+## 📍 API Endpoints
+
+### Auth
+
+| Rota                         | Descrição 
+|------------------------------|----------
+| <kbd>POST /Auth/Signup</kbd> | Registra um novo usuário [Detalhes da resposta](#signup)
+| <kbd>POST /Auth/Signin</kbd> | Faz login do usuário [Detalhes da resposta](#signin)
+
+<h3 id="signup">POST /Auth/Signup</h3>
+
+**REQUISIÇÃO**
+```json
+{
+  "name": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+**RESPOSTA**
+```json
+{
+  "message": "Usuário cadastrado com sucesso!",
+  "status": true,
+  "data": {
+    "name": "string",
+    "slug": "string",
+    "avatar": "string",
+    "token": "string"
+  }
+}
+```
+
+<h3 id="signin">POST /Auth/Signin</h3>
+
+**REQUISIÇÃO**
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+**RESPOSTA**
+```json
+{
+  "message": "Login realizado com sucesso!",
+  "status": true,
+  "data": {
+    "name": "string",
+    "slug": "string",
+    "avatar": "string",
+    "token": "string"
+  }
+}
+```
